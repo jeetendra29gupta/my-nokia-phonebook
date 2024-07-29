@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/address-book_0.png') }}">
+    <title>My Nokia Phonebook</title>
+    <style>
+        .logo img {
+            width: 40px;
+        }
+    </style>
+</head>
+<body class="w3-container w3-sand">
+
+<!-- Header -->
+<div class="w3-panel w3-leftbar w3-rightbar w3-light-blue w3-xlarge w3-serif w3-card w3-round">
+    <p class="w3-center logo">
+        <img src="{{ url_for('static', filename='images/address-book_1.png') }}" alt="Logo">
+        My Nokia Phonebook
+        <img src="{{ url_for('static', filename='images/address-book_1.png') }}" alt="Logo">
+    </p>
+</div>
+
+<!-- Menu -->
+<div class="w3-row w3-section">
+    <div class="w3-half w3-container">
+        <button class="w3-button w3-light-gray w3-round w3-border w3-block"
+                onclick="document.getElementById('add_new_contact_modal').style.display='block'">
+            &#10133; Add Contact &#10133;
+        </button>
+    </div>
+    <div class="w3-half w3-container">
+        <input class="w3-input w3-light-gray w3-round w3-border w3-center" type="text" onkeyup="search_function()"
+               placeholder=" &#128270; Search Contact By Name &#128269; " id="search_contact">
+    </div>
+</div>
+
+<!-- Contact List -->
+<div class="w3-responsive w3-container">
+    <table class="w3-table-all" id="contact-list">
+        <thead>
+        <tr class="w3-blue">
+            <th>Full Name</th>
+            <th>Mobile Number</th>
+            <th>Email ID</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for contact in contact_list %}
+        <tr class="contact">
+            <td>{{ contact.full_name }}</td>
+            <td>{{ contact.mobile_number }}</td>
+            <td>{{ contact.email_id }}</td>
+            <td>
+                <button title="Update Menu" onclick="update_contact({{contact.id}})">&#9889;</button>
+                <button title="Delete Menu" onclick="delete_contact({{contact.id}})">&#10060;</button>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Update Contact Modal -->
+<div id="update_contact_modal" class="w3-modal w3-animate-opacity">
+    <div class="w3-modal-content w3-card w3-round w3-animate-zoom">
+        <header class="w3-container w3-light-blue">
+            <h2 class="logo w3-center">
+                <img src="{{ url_for('static', filename='images/address-book_2.png') }}" alt="Logo">
+                Update Contact
+                <img src="{{ url_for('static', filename='images/address-book_2.png') }}" alt="Logo">
+            </h2>
+        </header>
+        <form class="w3-container" id="update_contact_form">
+            <input type="hidden" name="contact__id" id="contact__id">
+            <div class="w3-section">
+                <label for="full__name"><b>Full Name</b></label>
+                <input class="w3-input w3-border w3-margin-bottom w3-light-gray w3-round" type="text"
+                       placeholder="Full Name" id="full__name" name="full__name" required>
+            </div>
+            <div class="w3-section">
+                <label for="mobile__number"><b>Mobile Number</b></label>
+                <input class="w3-input w3-border w3-margin-bottom w3-light-gray w3-round" type="text"
+                       placeholder="Mobile Number" id="mobile__number" name="mobile__number" required>
+            </div>
+            <div class="w3-section">
+                <label for="email__id"><b>Email ID</b></label>
+                <input class="w3-input w3-border w3-margin-bottom w3-light-gray w3-round" type="text"
+                       placeholder="Email ID" id="email__id" name="email__id" required>
+            </div>
+            <div class="w3-row-padding w3-section w3-stretch modal-buttons">
+                <div class="w3-third">
+                    <button class="w3-button w3-green w3-round w3-border w3-block" type="submit">Submit</button>
+                </div>
+                <div class="w3-third">
+                    <button class="w3-button w3-blue w3-round w3-border w3-block" type="reset">Reset</button>
+                </div>
+                <div class="w3-third">
+                    <button class="w3-button w3-red w3-round w3-border w3-block" type="button"
+                            onclick="document.getElementById('update_contact_modal').style.display='none'">Cancel
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add New Contact Modal -->
+<div id="add_new_contact_modal" class="w3-modal w3-animate-opacity">
+    <div class="w3-modal-content w3-card w3-round w3-animate-zoom">
+        <header class="w3-container w3-light-blue">
+            <h2 class="logo w3-center">
+                <img src="{{ url_for('static', filename='images/address-book_2.png') }}" alt="Logo">
+                Add New Contact
+                <img src="{{ url_for('static', filename='images/address-book_2.png') }}" alt="Logo">
+            </h2>
+        </header>
+        <form class="w3-container" id="add_new_contact_form">
+            <div class="w3-section">
+                <label for="full_name"><b>Full Name</b></label>
+                <input class="w3-input w3-border w3-margin-bottom w3-light-gray w3-round" type="text"
+                       placeholder="Full Name" id="full_name" name="full_name" required>
+            </div>
+            <div class="w3-section">
+                <label for="mobile_number"><b>Mobile Number</b></label>
+                <input class="w3-input w3-border w3-margin-bottom w3-light-gray w3-round" type="text"
+                       placeholder="Mobile Number" id="mobile_number" name="mobile_number" required>
+            </div>
+            <div class="w3-section">
+                <label for="email_id"><b>Email ID</b></label>
+                <input class="w3-input w3-border w3-margin-bottom w3-light-gray w3-round" type="text"
+                       placeholder="Email ID" id="email_id" name="email_id" required>
+            </div>
+            <div class="w3-row-padding w3-section w3-stretch modal-buttons">
+                <div class="w3-third">
+                    <button class="w3-button w3-green w3-round w3-border w3-block" type="submit">Submit</button>
+                </div>
+                <div class="w3-third">
+                    <button class="w3-button w3-blue w3-round w3-border w3-block" type="reset">Reset</button>
+                </div>
+                <div class="w3-third">
+                    <button class="w3-button w3-red w3-round w3-border w3-block" type="button"
+                            onclick="document.getElementById('add_new_contact_modal').style.display='none'">Cancel
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
